@@ -1,0 +1,17 @@
+import requests
+from bs4 import BeautifulSoup
+import re
+
+
+for page_num in range(1, 2):  # جستجو در صفحات 1 تا 3
+    url = f'https://karnameh.com/buy-used-cars?page={page_num}'
+    data = requests.get(url)
+    soup = BeautifulSoup(data.text, 'html.parser')
+
+    results = soup.find_all('p', class_='MuiTypography-root MuiTypography-body1 muirtl-1nf835y')
+    price = soup.find_all('p', class_='MuiTypography-root MuiTypography-body1 muirtl-3rge6o')
+    kms = soup.find_all('p', class_='MuiTypography-root MuiTypography-body1 muirtl-1x7b2q1')
+    
+    for result, p in zip(results, price):
+        if re.search(r'\bپژو\b', result.text):
+            print(result.text.strip(), p.text.strip())
